@@ -29,6 +29,15 @@ public class FetchService {
     @Value("${url.path}")
     private String stringUrl;
 
+    @Value("${date.tag}")
+    private String dateTagName;
+
+    @Value("${code.tag}")
+    private String codeTagName;
+
+    @Value("${rate.tag}")
+    private String rateTagName;
+
     @Autowired
     private CurrencyRepository currencyRepository;
 
@@ -93,15 +102,15 @@ public class FetchService {
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
 
-                String date = element.getElementsByTagName("Dt")
+                String date = element.getElementsByTagName(dateTagName)
                         .item(0).getChildNodes().item(0).getNodeValue();
 
                 Element child = (Element) element.getChildNodes();
 
-                String code = child.getElementsByTagName("Ccy")
+                String code = child.getElementsByTagName(codeTagName)
                         .item(1).getChildNodes().item(0).getNodeValue();
 
-                Double rate = Double.parseDouble(child.getElementsByTagName("Amt")
+                Double rate = Double.parseDouble(child.getElementsByTagName(rateTagName)
                         .item(1).getChildNodes().item(0).getNodeValue());
 
                 currencies.add(new Currency(LocalDate.parse(date), code, rate));
